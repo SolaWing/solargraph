@@ -45,7 +45,8 @@ module Solargraph
             return_type: return_type.tag,
             location: (location ? location.to_hash : nil),
             deprecated: deprecated?
-          }
+          },
+          # documentation: docstring || "",
         }
       end
 
