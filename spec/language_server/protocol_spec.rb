@@ -423,7 +423,7 @@ describe Protocol do
     expect(@protocol.host.registered?('textDocument/completion')).to be(false)
   end
 
-  it "handles $/solargraph/checkGemVersion" do
+  it "handles $/solargraph/checkGemVersion", :net do
     @protocol.request '$/solargraph/checkGemVersion', { verbose: false }
     response = @protocol.response
     expect(response['error']).to be_nil
