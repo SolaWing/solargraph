@@ -5,6 +5,7 @@ require 'bundler/gem_tasks'
 begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec) do |t|
+    trap('SIGINT') {}
     t.rspec_opts = ENV['RSPEC_OPTS']
   end
 rescue LoadError

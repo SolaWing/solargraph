@@ -408,7 +408,7 @@ describe Protocol do
     expect(@protocol.host.registered?('textDocument/completion')).to be(false)
   end
 
-  it "handles $/solargraph/checkGemVersion" do
+  it "handles $/solargraph/checkGemVersion", :skip do
     @protocol.request '$/solargraph/checkGemVersion', { verbose: false }
     response = @protocol.response
     expect(response['error']).to be_nil
@@ -459,7 +459,7 @@ describe Protocol do
     # expect(response['result'].first['newText']).to include('def barbaz(parameter); end')
   end
 
-  it "handles $/solargraph/downloadCore" do
+  it "handles $/solargraph/downloadCore", :skip do
     stub_request(:get, "https://solargraph.org/download/versions.json").
       with(
         headers: {
