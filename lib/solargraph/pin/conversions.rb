@@ -18,7 +18,7 @@ module Solargraph
             location: (location ? location.to_hash : nil),
             deprecated: deprecated?
           },
-          documentation: docstring || "",
+          # documentation: docstring || "",
         }
       end
 
