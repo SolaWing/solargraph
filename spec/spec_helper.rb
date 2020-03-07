@@ -1,6 +1,8 @@
 require 'bundler/setup'
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
+
+require 'pry-byebug'
 unless ENV['SIMPLECOV_DISABLED']
   # set up lcov reporting for undercover
   require 'simplecov'
@@ -25,6 +27,7 @@ RSpec.configure do |c|
   # Allow use of --only-failures with rspec, handy for local development
   c.example_status_persistence_file_path = 'rspec-examples.txt'
 end
+
 require 'solargraph'
 # Suppress logger output in specs (if possible)
 if Solargraph::Logging.logger.respond_to?(:reopen) && !ENV.key?('SOLARGRAPH_LOG')
