@@ -45,6 +45,7 @@ describe Solargraph::Workspace::Config do
   end
 
   it "includes base reporters by default" do
+    ENV['SOLARGRAPH_GLOBAL_CONFIG'] = '.config/solargraph/config.yml'
     config = Solargraph::Workspace::Config.new(dir_path)
     expect(config.reporters).to include('rubocop')
     expect(config.reporters).to include('require_not_found')
