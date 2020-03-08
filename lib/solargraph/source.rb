@@ -108,6 +108,25 @@ module Solargraph
       end
     end
 
+    # TODO: rebase
+    # only try to repair the last input content. this is the most input cases.
+    # by replace the special chars and end to space
+    # @param code [String]
+    # @param changes [Array<Change>]
+    # @return [String, nil]
+    def repair_code(code, changes)
+      return unless (last_change = changes&.last) && (range = last_change.range)
+
+      off = Position.to_offset(code, range.start) + last_change.new_text.length
+      prefix = code[0, off]
+      # replace special char at the end
+      match = prefix.match(/[^\s\w]+\s*\z/)
+
+      if match
+        return prefix[0...-match[0].length] + ' ' * match[0].length + code[off..-1]
+      end
+    end
+
     # @param position [Position, Array(Integer, Integer)]
     # @return [Source::Cursor]
     def cursor_at position
