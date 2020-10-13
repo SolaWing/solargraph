@@ -130,7 +130,7 @@ module Solargraph
         synced.version = version
         return synced
       end
-      repaired = repair_code(@code, last_updater.changes)
+      repaired = repair_code(@code, last_updater&.changes)
       if repaired && (synced = Source.new(repaired, filename)) && synced.parsed?
         synced.error_ranges.concat(error_ranges + last_updater.changes.map(&:range))
         synced.code = @code
@@ -165,8 +165,8 @@ module Solargraph
         return synced
       end
 
-      repaired = repair_code(@code, last_updater.changes)
-      if (synced = Source.new(repaired, filename)) && synced.parsed?
+      repaired = repair_code(@code, last_updater&.changes)
+      if repaired && (synced = Source.new(repaired, filename)) && synced.parsed?
         synced.error_ranges.concat(error_ranges + last_updater.changes.map(&:range))
         synced.code = @code
         synced.synchronized = true
@@ -186,9 +186,9 @@ module Solargraph
     # by replace the special chars and end to space
     # @param code [String]
     # @param changes [Array<Change>]
-    # @return [String]
+    # @return [String, nil]
     def repair_code(code, changes)
-      return unless (last_change = changes.last) && (range = last_change.range)
+      return unless (last_change = changes&.last) && (range = last_change.range)
 
       off = Position.to_offset(code, range.start) + last_change.new_text.length
       prefix = code[0, off]
