@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 Dir.chdir(__dir__) do
+  # ensure solargraph deps use the bundle version. but not limit other external gem's version
   require 'bundler/setup'
   Bundler.require
   Bundler.reset!
