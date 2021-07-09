@@ -40,7 +40,7 @@ module Solargraph
       @source_map_hash = {}
       implicit.clear
       cache.clear
-      @store = Store.new(yard_map.pins + pins)
+      @store = Store.new(yard_map.pins + pins, @store)
       self
     end
 
@@ -69,7 +69,7 @@ module Solargraph
       external_requires.merge implicit.requires
       external_requires.merge bench.workspace.config.required
       yard_map.change(external_requires, bench.workspace.directory, bench.workspace.source_gems)
-      @store = Store.new(yard_map.pins + implicit.pins + pins)
+      @store = Store.new(yard_map.pins + implicit.pins + pins, @store)
       @unresolved_requires = yard_map.unresolved_requires
       @missing_docs = yard_map.missing_docs
       @rebindable_method_names = nil
