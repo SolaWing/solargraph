@@ -14,7 +14,7 @@ module Solargraph
 
     @@logger = Logger.new(STDERR, level: DEFAULT_LOG_LEVEL)
     @@logger.formatter = proc do |severity, datetime, progname, msg|
-      "[#{severity}] #{msg}\n"
+      "[#{severity}](#{datetime.strftime("%j %H:%M:%S.%L")}) #{msg}\n"
     end
 
     module_function
