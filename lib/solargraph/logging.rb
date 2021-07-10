@@ -24,7 +24,7 @@ module Solargraph
     @@logger = Logger.new(STDERR, level: level)
     # @sg-ignore Fix cvar issue
     @@logger.formatter = proc do |severity, datetime, progname, msg|
-      "[#{severity}] #{msg}\n"
+      "[#{severity}](#{datetime.strftime("%j %H:%M:%S.%L")}) #{msg}\n"
     end
 
     module_function

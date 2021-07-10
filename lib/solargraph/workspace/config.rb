@@ -22,6 +22,7 @@ module Solargraph
       def initialize directory = ''
         @directory = File.absolute_path(directory)
         @raw_data = config_data
+        Solargraph.logger.info "config file #{directory} is #{config_data}"
         included
         excluded
       end
