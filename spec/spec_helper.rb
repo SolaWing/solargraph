@@ -2,7 +2,7 @@ require 'bundler/setup'
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true)
 
-require 'pry'
+require 'pry-byebug'
 unless ENV['SIMPLECOV_DISABLED']
   require 'simplecov'
   SimpleCov.start
