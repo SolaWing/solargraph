@@ -1327,6 +1327,14 @@ describe Solargraph::SourceMap::Mapper do
     expect(bar).to be_explicit
   end
 
+  it 'marks local var from @!parse directives' do
+    map = Solargraph::SourceMap.load_string(%(
+        # @!parse
+        #   bar = ""
+    ))
+    expect(map.locals.first.name).to eq 'bar'
+  end
+
   it 'maps parameters to updated module_function methods' do
     map = Solargraph::SourceMap.load_string(%(
       module Foo
