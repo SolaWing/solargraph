@@ -182,7 +182,7 @@ module Solargraph
             else
               comment_position.line
             end
-            Parser.process_node(src.node, region, @pins)
+            Parser.process_node(src.node, region, @pins, @locals)
             @pins[index..-1].each do |p|
               # @todo Smelly instance variable access
               p.location.range.start.instance_variable_set(:@line, p.location.range.start.line + loff)
