@@ -6,6 +6,7 @@ exclude:
 - test/**/*
 - vendor/**/*
 - ".bundle/**/*"
+- pr/**/*
 require: ['bundle/require']
 domains: []
 reporters:
