@@ -16,4 +16,5 @@ coverage
 /.pryrc
 /.rspec-local
 vendor/cache
+/pr
 tags

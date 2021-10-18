@@ -1,0 +1,45 @@
+@startuml
+
+class LanguageServer::Host {
+    -- Dispatch --
+    var libraries
+}
+
+class Library {
+A Library handles coordination between a Workspace and an ApiMap.
+--
+var api_map
+var source_maps # Mapping src to SourceMap
+catalog() # 索引符号, 转发到ApiMap
+}
+
+class Workspace {
+  A workspace consists of the files in a project's directory and the
+  project's configuration. It provides a Source for each file to be used
+  in an associated Library or ApiMap.
+  --
+  var require_paths # 本地额外的require_paths, 比如lib/, 可以根据本地gemspec推断
+}
+
+class ApiMap {
+    An aggregate provider for information about
+    workspaces, sources, gems, and the Ruby core.
+    --
+    var YardMap
+}
+
+class Store {
+    对Pins进行分组，方便查询
+}
+
+class Pin {
+    基础的收集的各种符号和位置信息？
+}
+
+LanguageServer::Host *--"n" Library
+Library *-- ApiMap
+ApiMap *-- YardMap
+ApiMap *-- Store : immutable
+Store o-- "n" Pin
+
+@enduml
