@@ -1,3 +1,5 @@
+* [x] define_method self的推断
+* struct的支持
 * 类型标注: {String => <String>} 的补全的解析
 * 换行时的补全不能即时解析出来
 * &.不能正确推断
