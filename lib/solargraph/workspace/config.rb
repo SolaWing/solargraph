@@ -21,6 +21,7 @@ module Solargraph
       def initialize directory = ''
         @directory = directory
         @raw_data = config_data
+        Solargraph.logger.info "config file #{directory} is #{config_data}"
         included
         excluded
       end
