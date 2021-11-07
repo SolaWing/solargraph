@@ -4,8 +4,15 @@
 if defined? Bundler
   # pry invoke editor may inherit old bundle env. it's break solargraph(since not local)..
   # local solargraph should use bin/solargraph directly
-  Bundler.unbundled_exec('ruby', __FILE__, *ARGV)
+  ENV.replace(Bundler.unbundled_env)
+  restart = true
 end
+if ENV["solargraph"] != "1" || restart
+  # seems jit no effect?
+  exec({"solargraph" => "1"}, 'ruby', '--jit', __FILE__, *ARGV)
+  # never return, re exec
+end
+
 Dir.chdir(__dir__) do
   # ensure solargraph deps use the bundle version. but not limit other external gem's version
   require 'bundler/setup'
