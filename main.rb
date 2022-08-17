@@ -7,7 +7,8 @@ if defined? Bundler
   ENV.replace(Bundler.unbundled_env)
   restart = true
 end
-if ENV["solargraph"] != "1" || restart
+if restart || ( ENV["solargraph"] != "1" && !(ARGV & %w[socket stdio]).empty? )
+  $stderr.puts "restart with global env and jit"
   # seems jit no effect?
   exec({"solargraph" => "1"}, 'ruby', '--jit', __FILE__, *ARGV)
   # never return, re exec
