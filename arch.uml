@@ -1,0 +1,36 @@
+@startuml
+
+class LanguageServer::Host {
+    -- Dispatch --
+    var libraries
+}
+
+class Library {
+A Library handles coordination between a Workspace and an ApiMap.
+--
+var api_map
+catalog() # 索引符号
+}
+
+class ApiMap {
+    An aggregate provider for information about
+    workspaces, sources, gems, and the Ruby core.
+    --
+    var YardMap
+}
+
+class Store {
+    对Pins进行分组，方便查询
+}
+
+class Pin {
+
+}
+
+LanguageServer::Host *--"n" Library
+Library *-- ApiMap
+ApiMap *-- YardMap
+ApiMap *-- Store : immutable
+Store o-- "n" Pin
+
+@enduml
