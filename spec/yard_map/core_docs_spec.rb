@@ -66,18 +66,18 @@ describe Solargraph::YardMap::CoreDocs do
     expect(available).not_to be_empty
   end
 
-  it "finds the best download", :skip do
+  it "finds the best download", :net do
     available = Solargraph::YardMap::CoreDocs.available
     best_match = Solargraph::YardMap::CoreDocs.best_download
     expect(available).to include(best_match)
   end
 
-  it "finds the best download for future versions", :skip do
+  it "finds the best download for future versions", :net do
     best_match = Solargraph::YardMap::CoreDocs.best_download('99.99.99')
     expect(best_match).not_to be_nil
   end
 
-  it "downloads requested versions", :skip do
+  it "downloads requested versions", :net do
     Solargraph::YardMap::CoreDocs.download @download_version
     expect(Solargraph::YardMap::CoreDocs.valid?(@download_version)).to be(true)
   end

@@ -1,4 +1,4 @@
-describe Solargraph::LanguageServer::Message::Extended::CheckGemVersion, :skip do
+describe Solargraph::LanguageServer::Message::Extended::CheckGemVersion, :net do
   before :each do
     version = double(:GemVersion, version: Gem::Version.new('1.0.0'))
     Solargraph::LanguageServer::Message::Extended::CheckGemVersion.fetcher = double(:fetcher, search_for_dependency: [version])
