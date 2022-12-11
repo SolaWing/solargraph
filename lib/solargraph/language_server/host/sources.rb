@@ -36,6 +36,7 @@ module Solargraph
 
           return if queue.include?(uri)
           mutex.synchronize do
+            next unless open_source_hash.include?(uri)
             nxt = open_source_hash[uri].finish_synchronize
             open_source_hash[uri] = nxt
             changed
