@@ -42,6 +42,8 @@ module Solargraph
         raise DiagnosticsError, "Error in RuboCop configuration: #{e.message}"
       rescue JSON::ParserError => e
         raise DiagnosticsError, "RuboCop returned invalid data: #{e.message}"
+      rescue
+        raise DiagnosticsError, "RuboCop returned other exception: #{e.message}"
       end
 
       private
