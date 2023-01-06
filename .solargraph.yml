@@ -7,7 +7,7 @@ exclude:
 - vendor/**/*
 - ".bundle/**/*"
 - pr/**/*
-require: ['bundle/require']
+require: ['bundler/require']
 domains: []
 reporters:
 - require_not_found
