@@ -941,6 +941,28 @@ describe Solargraph::SourceMap::Clip do
     clip = api_map.clip_at('test.rb', [3, 19])
     expect(clip.infer.tag).to eq('File')
   end
+  it 'infers Hash value types' do
+    source = Solargraph::Source.load_string(%(
+      # @type [Hash<String, File>]
+      h = {}
+      h['file.txt']
+    ), 'test.rb')
+    api_map = Solargraph::ApiMap.new
+    api_map.map source
+    clip = api_map.clip_at('test.rb', [3, 19])
+    expect(clip.infer.tag).to eq('File')
+  end
+  it 'infers Hash value types' do
+    source = Solargraph::Source.load_string(%(
+      # @type [Hash<File>]
+      h = {}
+      h['file.txt']
+    ), 'test.rb')
+    api_map = Solargraph::ApiMap.new
+    api_map.map source
+    clip = api_map.clip_at('test.rb', [3, 19])
+    expect(clip.infer.tag).to eq('File')
+  end
 
   it 'infers self in instance methods' do
     source = Solargraph::Source.load_string(%(

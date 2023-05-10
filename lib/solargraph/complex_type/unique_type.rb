@@ -53,9 +53,13 @@ module Solargraph
             subtypes.concat(subs[1].map { |u| ComplexType.new([u]) })
           elsif parameters_type == :list && name == 'Hash'
             # Treat Hash<A, B> as Hash{A => B}
+            if subs.length == 1
+              subs.unshift(ComplexType.parse("::String", "::Symbol"))
+            end
             if subs.length != 2
               raise ComplexTypeError, "Bad hash type: name=#{name}, substring=#{substring} - must have exactly two parameters"
             end
+            parameters_type = :hash
             key_types.concat(subs[0].map { |u| ComplexType.new([u]) })
             subtypes.concat(subs[1].map { |u| ComplexType.new([u]) })
           else

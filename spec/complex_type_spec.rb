@@ -200,13 +200,23 @@ describe 'YARD type specifier list parsing' do
     it 'parses Hash using <> notation' do
       types = Solargraph::ComplexType.parse 'Hash<Symbol, String>'
       expect(types.length).to eq(1)
-      expect(types.first.tag).to eq('Hash<Symbol, String>')
+      expect(types.first.tag).to eq('Hash{Symbol => String}')
       expect(types.first.name).to eq('Hash')
       expect(types.first.key_types.length).to eq(1)
       expect(types.first.key_types[0].name).to eq('Symbol')
       expect(types.first.subtypes.length).to eq(1)
       expect(types.first.subtypes[0].name).to eq('String')
       expect(types.to_rbs).to eq('Hash[Symbol, String]')
+    end
+    it 'parses Hash using short <> notation' do
+      types = Solargraph::ComplexType.parse 'Hash<File>'
+      expect(types.length).to eq(1)
+      expect(types.first.tag).to eq('Hash{String, Symbol => File}')
+      expect(types.first.name).to eq('Hash')
+      expect(types.first.key_types.length).to eq(2)
+      expect(types.first.subtypes.length).to eq(1)
+      expect(types.first.subtypes[0].name).to eq('File')
+      expect(types.to_rbs).to eq('Hash[(::String | ::Symbol), File]')
     end
 
     # In the latter case, KeyTypes or ValueTypes can also be a list of
