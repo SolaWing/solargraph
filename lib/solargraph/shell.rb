@@ -313,6 +313,17 @@ module Solargraph
       end
     end
 
+    desc 'bundle', 'Generate documentation for bundled gems [deprecated]', hide: true
+    long_desc %(
+      The `bundle` command is deprecated. Solargraph currently uses RBS instead.
+    )
+    option :directory, type: :string, aliases: :d, desc: 'The workspace directory', default: '.'
+    option :rebuild, type: :boolean, aliases: :r, desc: 'Rebuild existing documentation', default: false
+    def bundle
+      Documentor.new(options[:directory], rebuild: options[:rebuild], out: STDOUT).document
+    end
+
+
     private
 
     # @param pin [Solargraph::Pin::Base]
