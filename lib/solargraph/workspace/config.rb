@@ -20,7 +20,7 @@ module Solargraph
 
       # @param directory [String]
       def initialize directory = ''
-        @directory = File.absolute_path(directory)
+        @directory = Solargraph.normalize_path File.absolute_path(directory)
         @raw_data = config_data
         Solargraph.logger.info "config file #{directory} is #{config_data}"
         included
@@ -45,7 +45,7 @@ module Solargraph
 
       # @param filename [String]
       def allow? filename
-        filename = File.absolute_path(filename, directory)
+        filename = Solargraph.normalize_path File.absolute_path(filename, directory)
         filename.start_with?(directory) &&
           !excluded.include?(filename) &&
           excluded_directories.none? { |d| filename.start_with?(d) }
@@ -196,6 +196,7 @@ module Solargraph
           Dir[File.absolute_path(glob, directory)]
             .map{ |f| f.gsub(/\\/, '/') }
             .select { |f| File.file?(f) }
+            .map { |f| Solargraph.normalize_path(f) }
         end
         result
       end
@@ -208,7 +209,7 @@ module Solargraph
       def process_exclusions globs
         remainder = globs.select do |glob|
           if glob_is_directory?(glob)
-            exdir = File.absolute_path(glob_to_directory(glob), directory)
+            exdir = Solargraph.normalize_path File.absolute_path(glob_to_directory(glob), directory)
             included.delete_if { |file| file.start_with?(exdir) }
             false
           else
@@ -249,7 +250,7 @@ module Solargraph
         excluded = @raw_data['exclude']
         excluded
           .select { |g| glob_is_directory?(g) }
-          .map { |g| File.absolute_path(glob_to_directory(g), directory) }
+          .map { |g| Solargraph.normalize_path File.absolute_path(glob_to_directory(g), directory) }
       end
     end
   end

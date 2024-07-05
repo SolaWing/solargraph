@@ -30,6 +30,7 @@ module Solargraph
                    else
                      File.absolute_path(directory)
                    end
+      @directory = Solargraph.normalize_path @directory unless directory == '*' or directory.empty?
       @config = config
       @server = server
       load_sources

@@ -98,6 +98,12 @@ module Solargraph
     end
     Bundler.send meth, &block
   end
+
+  # helper method to normalize path, eg handle symlink
+  # @return [String]
+  def self.normalize_path(path)
+    File.realdirpath(path) rescue File.absolute_path(path)
+  end
 end
 
 # Ensure that ParserGem node processors are properly loaded to avoid conflicts
