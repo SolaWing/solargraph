@@ -672,8 +672,9 @@ module Solargraph
         next nil if resolved.respond_to?(:visibility) && !visibility.include?(resolved.visibility)
         resolved
       end.compact
-      logger.debug { "ApiMap#resolve_method_aliases(pins=#{pins.map(&:name)}, visibility=#{visibility}) => #{with_resolved_aliases.map(&:name)}" }
-      GemPins.combine_method_pins_by_path(with_resolved_aliases)
+      return with_resolved_aliases
+      # logger.debug { "ApiMap#resolve_method_aliases(pins=#{pins.map(&:name)}, visibility=#{visibility}) => #{with_resolved_aliases.map(&:name)}" }
+      # GemPins.combine_method_pins_by_path(with_resolved_aliases)
     end
 
     # @param fq_reference_tag [String] A fully qualified whose method should be pulled in

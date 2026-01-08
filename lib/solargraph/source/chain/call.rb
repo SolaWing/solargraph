@@ -59,7 +59,8 @@ module Solargraph
           pins = name_pin.binder.each_unique_type.flat_map do |context|
             ns_tag = context.namespace == '' ? '' : context.namespace_type.tag
             stack = api_map.get_method_stack(ns_tag, word, scope: context.scope)
-            [stack.first].compact
+            next stack
+            # [stack.first].compact
           end
           return [] if pins.empty?
           inferred_pins(pins, api_map, name_pin, locals)

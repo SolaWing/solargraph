@@ -74,7 +74,9 @@ module Solargraph
           # @sg-ignore https://github.com/castwide/solargraph/pull/1114
           pin.is_a?(Pin::Method) && pin.scope == scope && visibility.include?(pin.visibility)
         end
-        GemPins.combine_method_pins_by_path(all_pins)
+        # TODO: combine feature?
+        return all_pins
+        # GemPins.combine_method_pins_by_path(all_pins)
       end
 
       BOOLEAN_SUPERCLASS_PIN = Pin::Reference::Superclass.new(name: 'Boolean', closure: Pin::ROOT_PIN, source: :solargraph)
