@@ -163,6 +163,8 @@ describe Solargraph::Source::SourceChainer do
       :node_at => nil,
       :tree_at => []
     )
+    allow(source).to receive(:offset_to_position) { |i| Solargraph::Position.new(0, i) }
+    allow(source).to receive(:position_to_offset) { |pos| pos.character }
     chain = Solargraph::Source::SourceChainer.chain(source, Solargraph::Position.new(0, 5))
     expect(chain.links.first.word).to eq('@foo')
     expect(chain.links.last.word).to eq('<undefined>')
@@ -181,6 +183,8 @@ describe Solargraph::Source::SourceChainer do
       :node_at => nil,
       :tree_at => []
     )
+    allow(source).to receive(:offset_to_position) { |i| Solargraph::Position.new(0, i) }
+    allow(source).to receive(:position_to_offset) { |pos| pos.character }
     chain = Solargraph::Source::SourceChainer.chain(source, Solargraph::Position.new(0, 6))
     expect(chain.links.first.word).to eq('@@foo')
     expect(chain.links.last.word).to eq('<undefined>')

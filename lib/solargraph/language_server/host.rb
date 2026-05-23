@@ -769,7 +769,7 @@ module Solargraph
         # @type [Diff::LCS::Change]
         diff = diffs.first.first
         return change unless diff.adding? && ['.', ':', '(', ',', ' '].include?(diff.element)
-        position = Solargraph::Position.from_offset(source.code, diff.position)
+        position = source.offset_to_position(diff.position)
         {
           'range' => {
             'start' => {

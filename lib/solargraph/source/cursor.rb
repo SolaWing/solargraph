@@ -67,8 +67,8 @@ module Solargraph
       # @return [Range]
       def range
         @range ||= begin
-          s = Position.from_offset(source.code, offset - start_of_word.length)
-          e = Position.from_offset(source.code, offset + end_of_word.length)
+          s = source.offset_to_position(offset - start_of_word.length)
+          e = source.offset_to_position(offset + end_of_word.length)
           Solargraph::Range.new(s, e)
         end
       end
@@ -126,7 +126,7 @@ module Solargraph
           if start_of_word.empty?
             match = source.code[0, offset].match(/\s*(\.|:+)\s*$/)
             if match
-              Position.from_offset(source.code, offset - match[0].length)
+              source.offset_to_position(offset - match[0].length)
             else
               position
             end
@@ -143,7 +143,7 @@ module Solargraph
 
       # @return [Integer]
       def offset
-        @offset ||= Position.to_offset(source.code, position)
+        @offset ||= source.position_to_offset(position)
       end
 
       private

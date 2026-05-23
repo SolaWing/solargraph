@@ -34,7 +34,7 @@ module Solargraph
         # Special handling for files that end with an integer and a period
         return Chain.new([Chain::Literal.new('Integer', Integer(phrase[0..-2])), Chain::UNDEFINED_CALL]) if phrase =~ /^[0-9]+\.$/
         return Chain.new([Chain::Literal.new('Symbol', phrase[1..].to_sym)]) if phrase.start_with?(':') && !phrase.start_with?('::')
-        return SourceChainer.chain(source, Position.new(position.line, position.character + 1)) if end_of_phrase.strip == '::' && source.code[Position.to_offset(source.code, position)].to_s.match?(/[a-z]/i)
+        return SourceChainer.chain(source, Position.new(position.line, position.character + 1)) if end_of_phrase.strip == '::' && source.code[source.position_to_offset(position)].to_s.match?(/[a-z]/i)
         begin
           return Chain.new([]) if phrase.end_with?('..')
           node = nil
@@ -91,7 +91,7 @@ module Solargraph
 
       # @return [Position]
       def fixed_position
-        @fixed_position ||= Position.from_offset(source.code, offset - end_of_phrase.length)
+        @fixed_position ||= source.offset_to_position(offset - end_of_phrase.length)
       end
 
       # @return [String]
@@ -123,7 +123,7 @@ module Solargraph
       # @param column [Integer]
       # @return [Integer]
       def get_offset line, column
-        Position.line_char_to_offset(@source.code, line, column)
+        @source.position_to_offset(Position.new(line, column))
       end
 
       # @return [Integer]
@@ -140,7 +140,7 @@ module Solargraph
         index -=1
         in_whitespace = false
         while index >= 0
-          pos = Position.from_offset(@source.code, index)
+          pos = @source.offset_to_position(index)
           break if index > 0 and @source.comment_at?(pos)
           break if brackets > 0 or parens > 0 or squares > 0
           char = @source.code[index, 1]

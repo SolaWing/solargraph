@@ -59,13 +59,13 @@ module Solargraph
           end
           inner_node_references(name, source.node).map do |n|
             rng = Range.from_node(n)
-            offset = Position.to_offset(source.code, rng.start)
+            offset = source.position_to_offset(rng.start)
             soff, eoff = extract_offset[source.code, offset]
             Location.new(
               source.filename,
               Range.new(
-                Position.from_offset(source.code, soff),
-                Position.from_offset(source.code, eoff)
+                source.offset_to_position(soff),
+                source.offset_to_position(eoff)
               )
             )
           end

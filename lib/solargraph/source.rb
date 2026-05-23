@@ -62,8 +62,8 @@ module Solargraph
     # @param c2 [Integer]
     # @return [String]
     def from_to l1, c1, l2, c2
-      b = Solargraph::Position.line_char_to_offset(code, l1, c1)
-      e = Solargraph::Position.line_char_to_offset(code, l2, c2)
+      b = position_to_offset(Position.new(l1, c1))
+      e = position_to_offset(Position.new(l2, c2))
       code[b..e-1]
     end
 
@@ -147,7 +147,7 @@ module Solargraph
     # @param position [Position]
     # @return [Boolean]
     def string_at? position
-      return false if Position.to_offset(code, position) >= code.length
+      return false if position_to_offset(position) >= code.length
       string_nodes.each do |node|
         range = Range.from_node(node)
         next if range.ending.line < position.line
@@ -185,6 +185,51 @@ module Solargraph
       false
     end
 
+    # Precomputed byte offsets of all newline characters in the source code.
+    # Used by #offset_to_position for O(log n) offset-to-position conversion.
+    #
+    # @return [Array<Integer>]
+    def newline_offsets
+      @newline_offsets ||= begin
+        offsets = []
+        idx = -1
+        while (idx = code.index("\n", idx + 1))
+          offsets << idx
+        end
+        offsets
+      end
+    end
+
+    # Convert a byte offset to a Position using binary search on cached
+    # newline offsets. This is O(log n) instead of the O(n) scan in
+    # Position.from_offset.
+    #
+    # @param offset [Integer]
+    # @return [Position]
+    def offset_to_position(offset)
+      offsets = newline_offsets
+      line = offsets.bsearch_index { |nl| nl >= offset } || offsets.length
+      if line == 0
+        Position.new(0, offset)
+      else
+        Position.new(line, offset - offsets[line - 1] - 1)
+      end
+    end
+
+    # Convert a Position to a byte offset using cached newline offsets.
+    # This is O(1) instead of the O(n) scan in Position.to_offset.
+    #
+    # @param position [Position]
+    # @return [Integer]
+    def position_to_offset(position)
+      line = position.line
+      if line == 0
+        position.character
+      else
+        newline_offsets[line - 1] + 1 + position.character
+      end
+    end
+
     # @param name [String]
     # @return [Array<Location>]
     def references name
@@ -200,8 +245,8 @@ module Solargraph
     # @return [String]
     def code_for(node)
       rng = Range.from_node(node)
-      b = Position.line_char_to_offset(code, rng.start.line, rng.start.column)
-      e = Position.line_char_to_offset(code, rng.ending.line, rng.ending.column)
+      b = position_to_offset(Position.new(rng.start.line, rng.start.column))
+      e = position_to_offset(Position.new(rng.ending.line, rng.ending.column))
       frag = code[b..e-1].to_s
       frag.strip.gsub(/,$/, '')
     end
@@ -221,7 +266,7 @@ module Solargraph
     # @return [Location]
     def location
       st = Position.new(0, 0)
-      en = Position.from_offset(code, code.length)
+      en = offset_to_position(code.length)
       range = Range.new(st, en)
       Location.new(filename, range)
     end
@@ -410,6 +455,7 @@ module Solargraph
     def finalize
       return if @finalized && changes.empty?
 
+      @newline_offsets = nil
       changes.each do |change|
         @code = change.write(@code)
       end

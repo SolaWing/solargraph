@@ -47,7 +47,7 @@ module Solargraph
       # @param source [Solargraph::Source]
       # @return [Integer]
       def last_character position, source
-        cursor = Position.to_offset(source.code, position)
+        cursor = source.position_to_offset(position)
         source.code.index(/[\r\n]/, cursor) || source.code.length
       end
     end
